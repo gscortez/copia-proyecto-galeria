@@ -35,7 +35,7 @@ router.get('/:itemId', function(req, res, next) {
     })
 
     const combinations = db.collection('combinations');
-    combinations.findOne({ itemId: new ObjectID(itemId) }, {}, (error, combination) => {
+    combinations.find({ itemId: new ObjectID(itemId) }, {}).toArray(function(error, combination){
       if (error) {
         res.status(500);
         res.json(err);
