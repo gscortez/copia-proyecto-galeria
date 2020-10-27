@@ -68,4 +68,24 @@ router.post('/:itemId/combinations', function(req, res, next) {
   })
   res.end();
 });
+router.patch('/:itemId', function(req, res, next) {
+  console.log(`update combinations`);
+  const { params,body } = req;
+  const { name, price, description, stock, lowPrice, status } = body
+  const { itemId } = params;
+  console.log(name,' ', price,' ', description,' ', stock,' ', lowPrice,' ', status);
+  console.log(`itemId: ${itemId}`)
+  const db = client.db(`marketGalleryDB`);
+  const newValues = { $set: {name: name, price: price, description: description, stock: stock, lowPrice: lowPrice, status: status}}
+  const items = db.collection('items');
+  items.updateOne({ _id: new ObjectID(itemId) }, newValues,(error, result) => {
+    if (error) {
+      res.status(500);
+      res.json(err);
+      return;
+    }
+  })
+  res.end();
+});
+
 module.exports = router;
