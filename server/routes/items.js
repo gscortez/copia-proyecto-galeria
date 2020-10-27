@@ -35,7 +35,7 @@ router.get('/:itemId', function(req, res, next) {
     })
 
     const combinations = db.collection('combinations');
-    combinations.find({ itemId: new ObjectID(itemId) }, {}).toArray(function(error, combination){
+    combinations.find({ itemId: new ObjectID(itemId) }, {}).toArray((error, combination) => {
       if (error) {
         res.status(500);
         res.json(err);
@@ -51,5 +51,21 @@ router.get('/:itemId', function(req, res, next) {
     
   })
 });
-
+router.post('/:itemId/combinations', function(req, res, next) {
+  console.log(`post combinations`);
+  const { params,body } = req;
+  const combination = body
+  const { itemId } = params;
+  const db = client.db(`marketGalleryDB`);
+  combination.itemId = new ObjectID(itemId);
+  const combinations = db.collection('combinations');
+  combinations.insertOne(combination ,(error, result) => {
+    if (error) {
+      res.status(500);
+      res.json(err);
+      return;
+    }
+  })
+  res.end();
+});
 module.exports = router;
